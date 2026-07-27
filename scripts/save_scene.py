@@ -14,5 +14,6 @@ if app_utils.is_playing():
 
 ctx = omni.usd.get_context()
 ok = ctx.save_as_stage(usd_path)  # synchronous save-as
-n = len(ctx.get_stage().TraverseAll()) if ctx.get_stage() else 0
+stage = ctx.get_stage()
+n = sum(1 for _ in stage.Traverse()) if stage else 0
 print(f"SAVED path={usd_path} ok={ok} prims={n}")

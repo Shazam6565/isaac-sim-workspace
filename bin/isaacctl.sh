@@ -53,7 +53,7 @@ wait_ready(){
   err "timed out waiting for instance readiness"; return 1
 }
 
-remote_ip(){ remote "curl -s ifconfig.me"; }
+remote_ip(){ remote "curl -s ifconfig.me" | grep -oE '^[0-9]{1,3}(\.[0-9]{1,3}){3}'; }  # brev exec appends a stray instance-name line to stdout; keep only the IP
 
 # ---------------------------------------------------------------- tunnel
 tunnel_up(){ python3 -c "import socket;s=socket.socket();s.settimeout(2);s.connect(('127.0.0.1',$PORT))" 2>/dev/null; }
@@ -108,7 +108,10 @@ create_instance(){                        # full cold setup (~20-40 min)
   brev copy "$HELPERS/patch_compose.py" "$INSTANCE:$REMOTE_HOME/patch_compose.py" >/dev/null 2>&1
   remote "python3 $REMOTE_HOME/patch_compose.py"
   log "preparing cache dirs ..."
-  remote "mkdir -p ~/docker/isaac-sim/cache/main ~/docker/isaac-sim/cache/computecache ~/docker/isaac-sim/config ~/docker/isaac-sim/data ~/docker/isaac-sim/logs ~/docker/isaac-sim/pkg ~/.cache/ov/hub && sudo chown -R 1234:1234 ~/docker" >/dev/null
+  # container runs as uid 1234 and needs ownership of ~/docker to write caches/data; the ubuntu
+  # ssh user (uid 1000) also needs write access to ~/docker/isaac-sim/data so `resume` can push
+  # scenes in — chown alone (owner+group 1234, no perms for others) locks ubuntu out of it.
+  remote "mkdir -p ~/docker/isaac-sim/cache/main ~/docker/isaac-sim/cache/computecache ~/docker/isaac-sim/config ~/docker/isaac-sim/data ~/docker/isaac-sim/logs ~/docker/isaac-sim/pkg ~/.cache/ov/hub && sudo chown -R 1234:1234 ~/docker && sudo chmod -R o+rwX ~/docker/isaac-sim/data" >/dev/null
   compose_up
   wait_isaacsim 50                        # up to ~25 min for the 15GB image pull
 }

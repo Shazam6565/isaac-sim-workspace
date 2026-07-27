@@ -1,0 +1,9 @@
+# machine-local runtime state (tunnel pid, cached public ip, last-scene pointer)
+state/
+# logs and screenshots are local artifacts
+logs/
+captures/
+# python / macos cruft
+__pycache__/
+*.pyc
+.DS_Store

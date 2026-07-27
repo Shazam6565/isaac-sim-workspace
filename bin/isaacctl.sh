@@ -211,7 +211,7 @@ cmd_teardown(){
   fi
   close_tunnel
   log "DELETING instance (your work is safe in GitHub) ..."
-  yes | brev delete "$INSTANCE" >&2 2>/dev/null || true
+  brev delete "$INSTANCE" >&2 || true   # brev delete does not prompt; no piping needed
   state_set public_ip ""
   log "deleted. /isaac-up will rebuild from scratch and pull your scene from GitHub."
 }

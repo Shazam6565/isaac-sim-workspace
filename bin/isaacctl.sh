@@ -14,7 +14,8 @@ COMPOSE_REL="tools/docker/docker-compose.yml"
 PROJECT="isim"
 PORT=8226                                # python_server remote-control port
 
-ROOT="$HOME/isaac-sim"
+# self-locating: repo root = parent of this script's bin/ dir (works from any clone location)
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SKILL="$ROOT/skills/isaac-sim-remote/scripts"
 HELPERS="$ROOT/scripts"
 SCENES="$ROOT/scenes"

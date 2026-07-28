@@ -39,6 +39,10 @@ state_set(){ STATE="$STATE" K="$1" V="$2" python3 -c "import json,os;p=os.enviro
 
 # ---------------------------------------------------------------- brev helpers
 remote(){ brev exec "$INSTANCE" "$*" 2>/dev/null; }          # run a command on the instance
+# Is the SSH transport itself usable? remote() swallows stderr, so a dead Brev
+# gateway returns "" — identical to a command that legitimately printed nothing.
+# Poll loops use this to tell "not ready yet" apart from "cannot reach the box".
+ssh_alive(){ [[ "$(brev exec "$INSTANCE" "echo __SSH_OK__" 2>/dev/null)" == *__SSH_OK__* ]]; }
 inst_line(){ brev ls 2>/dev/null | grep -E "(^|[[:space:]])$INSTANCE([[:space:]])" || true; }
 inst_status(){ inst_line | awk '{print $2}'; }               # RUNNING/STOPPED/... or empty
 is_running(){ inst_line | grep -q RUNNING; }
@@ -80,12 +84,30 @@ send_skill(){ python3 "$SKILL/isaacsim_send.py" --file "$SKILL/$1" "${@:2}"; }
 
 # ---------------------------------------------------------------- container lifecycle
 wait_isaacsim(){                          # $1 = max 30s-ticks
-  local max="${1:-20}" out
+  local max="${1:-20}" out dead=0
   log "waiting for Isaac Sim (port $PORT + healthy) ..."
   for _ in $(seq 1 "$max"); do
     out=$(remote "nc -z -w2 127.0.0.1 $PORT && echo PORT_OK; docker ps | grep isaac-sim-1 | grep -q '(healthy)' && echo HEALTHY")
     if echo "$out" | grep -q PORT_OK && echo "$out" | grep -q HEALTHY; then
       log "Isaac Sim is ready"; return 0
+    fi
+    # An empty probe means either "still starting" or "SSH is gone". Left
+    # undistinguished, a dead gateway burns the full timeout (25 min on a cold
+    # create) and then blames Isaac Sim for a container problem that never
+    # existed. Confirm the transport before spending another tick on it.
+    if [ -z "$out" ]; then
+      if ssh_alive; then
+        dead=0
+      else
+        dead=$((dead + 1))
+        log "no SSH to $INSTANCE (strike $dead/3) ..."
+        if [ "$dead" -ge 3 ]; then
+          err "lost SSH to $INSTANCE — the container may be fine, but we cannot see it."
+          err "try: brev stop $INSTANCE && brev start $INSTANCE   (preserves the disk)"
+          err "avoid 'brev reset' — it only keeps /home/brev/workspace and would discard the image pull"
+          return 1
+        fi
+      fi
     fi
     sleep 30
   done

@@ -240,23 +240,31 @@ cmd_save(){
   out=$(send_file "$HELPERS/save_scene.py" --arg "usd_path=$CONTAINER_DATA/$name.usda" --timeout 120 2>&1) \
     || { echo "$out" >&2; err "save failed in Isaac Sim"; return 1; }
   echo "$out" >&2
-  after=$(remote "stat -c %Y.%s $REMOTE_DATA/$name.usda 2>/dev/null || echo none" | tr -d '\r')
-
   case "$out" in
     *"WRITABLE=False"*)
       err "Isaac Sim cannot write $name.usda — it is not owned by uid $CONTAINER_UID."
       err "Fix:  brev exec $INSTANCE \"sudo chown $CONTAINER_UID:$CONTAINER_UID $REMOTE_DATA/$name.usda\""
       return 1 ;;
   esac
+  # Verified behaviour: save_as_stage() skips the write when the root layer is clean,
+  # so an unchanged file is only a failure if there were edits to persist. The flush
+  # can lag the call returning, so poll instead of stat'ing once.
+  after="$before"
+  for _ in $(seq 1 10); do
+    after=$(remote "stat -c %Y.%s $REMOTE_DATA/$name.usda 2>/dev/null || echo none" | tr -d '\r')
+    [ "$before" != "$after" ] && break
+    sleep 1
+  done
   if [ "$before" = "$after" ]; then
     case "$out" in
       *"DIRTY=True"*)
-        err "$name.usda has unsaved edits but did not change on disk — the write was refused."
+        err "$name.usda had unsaved edits but never changed on disk — the write was refused."
+        err "Check ownership:  brev exec $INSTANCE \"ls -l $REMOTE_DATA/$name.usda\"  (must be uid $CONTAINER_UID)"
         return 1 ;;
       *)
-        # Nothing to write: edits that live only in the session layer (viewport camera,
-        # selection, hidden-in-viewport flags) are intentionally never persisted.
-        log "no changes to write — $name.usda on disk is already current" ;;
+        # Root layer clean. Viewport camera, selection and hide flags live in the
+        # session layer and are intentionally never written to the .usda.
+        log "nothing to write — $name.usda on disk is already current" ;;
     esac
   fi
   remote "sudo chmod 664 $REMOTE_DATA/$name.usda" >/dev/null

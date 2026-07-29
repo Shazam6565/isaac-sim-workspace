@@ -7,12 +7,12 @@
                 double radius = 5
             }
             dictionary Perspective = {
-                double3 position = (5.545583338704984, 6.231270921287943, 6.792497939657545)
-                double3 target = (-19.930408857876863, -19.24472127529389, -18.683493648857453)
+                double3 position = (9.287134030530346, 7.645400818203003, 5.338551716047393)
+                double3 target = (-17.626233954086782, -21.282691969705965, -14.306156874242271)
             }
             dictionary Right = {
                 double3 position = (0, -5, 0)
-                double radius = 5
+                double radius = 6.082133483886719
             }
             dictionary Top = {
                 double3 position = (0, 0, 5)
@@ -21,13 +21,14 @@
             string boundCamera = "/OmniverseKit_Persp"
         }
         dictionary omni_layer = {
-            string authoring_layer = "./falling-cube.usda"
+            string authoring_layer = "./latest.usda"
             dictionary locked = {
             }
             dictionary muteness = {
             }
         }
         dictionary renderSettings = {
+            bool "rtx:useViewLightingMode" = 1
         }
     }
     defaultPrim = "World"
@@ -292,6 +293,7 @@ def "Render" (
                 float omni:rtx:rtpt:modulatingRoughnessThreshold = 0.08
                 bool omni:rtx:scene:hydra:materialSyncLoads = 1
                 bool omni:rtx:scene:hydra:mdlMaterialWarmup = 1
+                bool omni:rtx:scene:useViewLightingMode = 1
                 rel orderedVars = </Render/Vars/LdrColor>
                 custom bool overrideClipRange = 0
                 uniform int2 resolution = (1280, 720)
@@ -342,10 +344,10 @@ over "OmniverseKit_Persp" (
     float focalLength = 18.147562
     float focusDistance = 400
     custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -44.12571250664044)
-    float3 xformOp:rotateXYZ = (54.73561, -6.3611094e-15, 135)
+    float3 xformOp:rotateXYZ = (63.56395, -6.9972206e-14, 137.0663)
     float3 xformOp:scale = (1, 1, 1)
     matrix4d xformOp:transform = ( (-0.7071067811865475, 0.7071067811865475, 0, 0), (-0.09133370363944027, -0.09133370363944027, 0.9916230680853516, 0), (0.7011833958241617, 0.7011833958241617, 0.12916536238866133, -0), (19, 19, 7.499999999999999, 1) )
-    double3 xformOp:translate = (5.545583338704984, 6.231270921287943, 6.792497939657545)
+    double3 xformOp:translate = (9.287134030530346, 7.645400818203003, 5.338551716047393)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
 }
 
@@ -375,6 +377,7 @@ over "OmniverseKit_Front" (
 }
 
 over "OmniverseKit_Right" (
+    prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
     customData = {
         dictionary omni = {
             dictionary kit = {
@@ -389,10 +392,10 @@ over "OmniverseKit_Right" (
 )
 {
     float2 clippingRange = (1, 10000000)
-    float horizontalAperture = 50
+    float horizontalAperture = 60.821335
     custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -5)
     token projection = "orthographic"
-    float verticalAperture = 50
+    float verticalAperture = 60.821335
     float3 xformOp:rotateXYZ = (90, -1.41245e-30, 1.2722219e-14)
     float3 xformOp:scale = (1, 1, 1)
     double3 xformOp:translate = (0, -5, 0)

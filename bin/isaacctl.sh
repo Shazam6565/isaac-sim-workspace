@@ -13,6 +13,7 @@ REMOTE_REPO="$REMOTE_HOME/IsaacSim"
 COMPOSE_REL="tools/docker/docker-compose.yml"
 PROJECT="isim"
 PORT=8226                                # python_server remote-control port
+CONTAINER_UID=1234                       # uid:gid Isaac Sim runs as inside the container
 
 # self-locating: repo root = parent of this script's bin/ dir (works from any clone location)
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -232,8 +233,33 @@ cmd_save(){
   ensure_tunnel || return 1
   local name="${1:-latest}"
   log "saving scene '$name' (stopping sim for a clean snapshot) ..."
-  send_file "$HELPERS/save_scene.py" --arg "usd_path=$CONTAINER_DATA/$name.usda" --timeout 120 || { err "save failed in Isaac Sim"; return 1; }
-  remote "sudo chmod 644 $REMOTE_DATA/$name.usda" >/dev/null
+  # save_as_stage() returns ok=True even when the write is refused, so trust the
+  # DIRTY/WRITABLE flags the helper reports, not its return value.
+  local out before after
+  before=$(remote "stat -c %Y.%s $REMOTE_DATA/$name.usda 2>/dev/null || echo none" | tr -d '\r')
+  out=$(send_file "$HELPERS/save_scene.py" --arg "usd_path=$CONTAINER_DATA/$name.usda" --timeout 120 2>&1) \
+    || { echo "$out" >&2; err "save failed in Isaac Sim"; return 1; }
+  echo "$out" >&2
+  after=$(remote "stat -c %Y.%s $REMOTE_DATA/$name.usda 2>/dev/null || echo none" | tr -d '\r')
+
+  case "$out" in
+    *"WRITABLE=False"*)
+      err "Isaac Sim cannot write $name.usda — it is not owned by uid $CONTAINER_UID."
+      err "Fix:  brev exec $INSTANCE \"sudo chown $CONTAINER_UID:$CONTAINER_UID $REMOTE_DATA/$name.usda\""
+      return 1 ;;
+  esac
+  if [ "$before" = "$after" ]; then
+    case "$out" in
+      *"DIRTY=True"*)
+        err "$name.usda has unsaved edits but did not change on disk — the write was refused."
+        return 1 ;;
+      *)
+        # Nothing to write: edits that live only in the session layer (viewport camera,
+        # selection, hidden-in-viewport flags) are intentionally never persisted.
+        log "no changes to write — $name.usda on disk is already current" ;;
+    esac
+  fi
+  remote "sudo chmod 664 $REMOTE_DATA/$name.usda" >/dev/null
   brev copy "$INSTANCE:$REMOTE_DATA/$name.usda" "$SCENES/$name.usda" >/dev/null 2>&1 || { err "copy back failed"; return 1; }
   state_set last_scene "$name"
   git_commit "save: $name ($(date '+%Y-%m-%d %H:%M'))"
@@ -248,6 +274,11 @@ cmd_resume(){
   if [ -f "$SCENES/$name.usda" ]; then
     log "pushing scene '$name' to instance ..."
     brev copy "$SCENES/$name.usda" "$INSTANCE:$REMOTE_DATA/$name.usda" >/dev/null 2>&1
+    # `brev copy` runs as the ssh user (ubuntu), so the file lands ubuntu:ubuntu 644.
+    # Isaac Sim runs as uid $CONTAINER_UID and could then READ but never OVERWRITE it —
+    # which silently breaks both File>Save in the GUI and save_as_stage() from a script.
+    remote "sudo chown $CONTAINER_UID:$CONTAINER_UID $REMOTE_DATA/$name.usda && sudo chmod 664 $REMOTE_DATA/$name.usda" >/dev/null 2>&1 \
+      || err "could not hand $name.usda to the container user — saving from Isaac Sim may fail"
   fi
   send_skill set_asset_root.py --arg asset_root=staging --timeout 60 >/dev/null 2>&1
   log "opening scene '$name' ..."

@@ -23,6 +23,7 @@ CAPTURES="$ROOT/captures"
 LOGS="$ROOT/logs"
 STATE="$ROOT/state/state.json"
 PIDFILE="$ROOT/state/tunnel.pid"
+KEEPFILE="$ROOT/state/tunnel-keepalive.pid"     # holds the ControlPersist keepalive
 REMOTE_DATA="$REMOTE_HOME/docker/isaac-sim/data"        # host side of the volume
 CONTAINER_DATA="/isaac-sim/.local/share/ov/data"        # container side (Isaac Sim sees this)
 
@@ -61,19 +62,69 @@ wait_ready(){
 remote_ip(){ remote "curl -s ifconfig.me" | grep -oE '^[0-9]{1,3}(\.[0-9]{1,3}){3}'; }  # brev exec appends a stray instance-name line to stdout; keep only the IP
 
 # ---------------------------------------------------------------- tunnel
+# `brev port-forward` exits immediately; the forward is actually held by an ssh
+# ControlMaster mux (ControlPath ~/.ssh/brev-control-%C in ~/.brev/ssh_config).
+# That mux is configured `ControlPersist 10m`, so it tears itself down after ten
+# idle minutes — and the WebRTC viewer never crosses this tunnel, so a browser-only
+# session leaves it perfectly idle and it dies under you. ServerAliveInterval does
+# not help: it keeps TCP alive but is not channel activity. So we run a keepalive
+# that opens a real connection through the forward well inside that window.
 tunnel_up(){ python3 -c "import socket;s=socket.socket();s.settimeout(2);s.connect(('127.0.0.1',$PORT))" 2>/dev/null; }
 close_tunnel(){
-  [ -f "$PIDFILE" ] && kill "$(cat "$PIDFILE")" 2>/dev/null
+  [ -f "$KEEPFILE" ] && kill "$(cat "$KEEPFILE")" 2>/dev/null
+  [ -f "$PIDFILE" ]  && kill "$(cat "$PIDFILE")"  2>/dev/null
   pkill -f "port-forward $INSTANCE" 2>/dev/null
-  rm -f "$PIDFILE"
+  ssh -O exit "$INSTANCE" 2>/dev/null            # drop the ControlMaster mux itself
+  rm -f "$PIDFILE" "$KEEPFILE"
   return 0
+}
+start_keepalive(){
+  [ -f "$KEEPFILE" ] && kill "$(cat "$KEEPFILE")" 2>/dev/null
+  PORT="$PORT" KEEPFILE="$KEEPFILE" TLOG="$LOGS/tunnel.log" python3 - <<'PY'
+import os, subprocess, sys, textwrap
+port, keepfile, logf = os.environ["PORT"], os.environ["KEEPFILE"], os.environ["TLOG"]
+# Touch the forward every 4 min — comfortably inside ControlPersist 10m.
+code = textwrap.dedent(f"""
+    import socket, time
+    while True:
+        time.sleep(240)
+        try:
+            s = socket.socket(); s.settimeout(5)
+            s.connect(('127.0.0.1', {port})); s.close()
+        except OSError:
+            pass
+""")
+f = open(logf, "ab", buffering=0)
+p = subprocess.Popen([sys.executable, "-c", code], stdout=f, stderr=f,
+                     stdin=subprocess.DEVNULL, start_new_session=True)
+with open(keepfile, "w") as fh:
+    fh.write(str(p.pid))
+PY
 }
 open_tunnel(){
   close_tunnel
   log "opening SSH tunnel  localhost:$PORT -> $INSTANCE:$PORT ..."
-  nohup brev port-forward "$INSTANCE" -p "$PORT:$PORT" >"$LOGS/tunnel.log" 2>&1 &
-  echo $! >"$PIDFILE"
-  for _ in $(seq 1 30); do tunnel_up && { log "tunnel is up"; return 0; }; sleep 2; done
+  INSTANCE="$INSTANCE" PORT="$PORT" TLOG="$LOGS/tunnel.log" PIDFILE="$PIDFILE" python3 - <<'PY'
+import os, subprocess
+inst, port = os.environ["INSTANCE"], os.environ["PORT"]
+logf, pidfile = os.environ["TLOG"], os.environ["PIDFILE"]
+f = open(logf, "ab", buffering=0)          # append, not truncate: a truncated log
+p = subprocess.Popen(                      # is why this failure was invisible before
+    ["brev", "port-forward", inst, "-p", f"{port}:{port}"],
+    stdout=f, stderr=f, stdin=subprocess.DEVNULL,
+    start_new_session=True,
+)
+with open(pidfile, "w") as fh:
+    fh.write(str(p.pid))
+PY
+  for _ in $(seq 1 30); do
+    if tunnel_up; then
+      start_keepalive
+      log "tunnel is up (keepalive pid $(cat "$KEEPFILE" 2>/dev/null), pings every 4m)"
+      return 0
+    fi
+    sleep 2
+  done
   err "tunnel failed to open (see $LOGS/tunnel.log)"; return 1
 }
 ensure_tunnel(){ tunnel_up || open_tunnel; }

@@ -301,30 +301,6 @@ def Xform "World"
                 double3 xformOp:translate = (0, 0, 0.05)
                 uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
 
-                def PhysicsFixedJoint "camera_joint"
-                {
-                    rel physics:body0 = </World/SimpleRobot/Front_Sensor/Camera>
-                    rel physics:body1 = </World/SimpleRobot/Front_Sensor/Sensor_Mount>
-                    float physics:breakForce = 3.4028235e38
-                    float physics:breakTorque = 3.4028235e38
-                    point3f physics:localPos0 = (0.06500976, 0.6460909, 0.8077006)
-                    point3f physics:localPos1 = (0, 0, 0)
-                    quatf physics:localRot0 = (0.28379306, -0.62295306, 0.6633719, 0.30220634)
-                    quatf physics:localRot1 = (1, 0, 0, 0)
-                }
-
-                def PhysicsFixedJoint "sensor_body_joint"
-                {
-                    rel physics:body0 = </World/SimpleRobot/FallingCube>
-                    rel physics:body1 = </World/SimpleRobot/Front_Sensor/Sensor_Mount>
-                    float physics:breakForce = 3.4028235e38
-                    float physics:breakTorque = 3.4028235e38
-                    point3f physics:localPos0 = (0.462869, 0.010288619, 0.59989107)
-                    point3f physics:localPos1 = (0, 0, 0)
-                    quatf physics:localRot0 = (1, 0, 0, 0)
-                    quatf physics:localRot1 = (1, 0, 0, 0)
-                }
-
                 def Camera "Robot_Camera" (
                     prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
                 )
@@ -341,23 +317,6 @@ def Xform "World"
                     matrix4d xformOp:transform = ( (0, -10, 0, 0), (0, 0, 10, 0), (-10, 0, 0, 0), (39731245.18148271, 0, -5.329070518200751e-15, 1) )
                     uniform token[] xformOpOrder = ["xformOp:transform"]
                 }
-            }
-
-            def Camera "Camera" (
-                prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
-            )
-            {
-                float2 clippingRange = (0.01, 10000000)
-                float exposure:fStop = 5
-                float exposure:responsivity = 1.1026709
-                float exposure:time = 0.02
-                float focalLength = 18.147562
-                float focusDistance = 400
-                custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -0.07007617336787643)
-                quatd xformOp:orient = (0.6954614649445694, -0.19516219247450142, -0.6754936416813576, -0.14816682980261417)
-                double3 xformOp:scale = (0.10000000149011612, 0.10000000149011612, 0.10000000149011612)
-                double3 xformOp:translate = (1.9913243182430955, -0.004841043144262791, 0.05182720361440621)
-                uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
             }
 
             def PhysicsFixedJoint "FixedJoint"
@@ -390,6 +349,13 @@ def Xform "World"
                 double3 xformOp:translate = (0, 0, 0.15)
                 uniform token[] xformOpOrder = ["xformOp:translate"]
                 float yawOffset = 0
+            }
+
+            def Camera "Camera" (
+                active = false
+                prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
+            )
+            {
             }
         }
     }
@@ -469,12 +435,6 @@ def Xform "World"
         double3 xformOp:scale = (1, 1, 1)
         double3 xformOp:translate = (4, -4, 0.5)
         uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
-    }
-
-    def Camera "Camera" (
-        prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
-    )
-    {
     }
 
     def Xform "Obstacles"

@@ -7,8 +7,8 @@
                 double radius = 5
             }
             dictionary Perspective = {
-                double3 position = (9.104333292241337, -9.879226782504915, 7.821560505274261)
-                double3 target = (9.104065206686705, -9.878862250968865, 7.821332136204303)
+                double3 position = (3.8510257629432276, -4.1467786159617965, 3.653898219263342)
+                double3 target = (0.8089481777085425, -0.010288619510363972, 1.0624999999999982)
             }
             dictionary Right = {
                 double3 position = (0, -5, 0)
@@ -18,7 +18,7 @@
                 double3 position = (0, 0, 5)
                 double radius = 5.151391220092774
             }
-            string boundCamera = "/World/SimpleRobot/Front_Sensor/Camera"
+            string boundCamera = "/OmniverseKit_Persp"
         }
         dictionary omni_layer = {
             string authoring_layer = "./latest.usda"
@@ -356,6 +356,9 @@ def Xform "World"
                 prepend apiSchemas = ["OmniRtxCameraAutoExposureAPI_1", "OmniRtxCameraExposureAPI_1"]
             )
             {
+                float exposure:fStop = 5
+                float exposure:responsivity = 1.1026709
+                float exposure:time = 0.02
             }
         }
     }
@@ -620,11 +623,11 @@ over "OmniverseKit_Persp" (
     float exposure:time = 0.02
     float focalLength = 18.147562
     float focusDistance = 400
-    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -0.0005068584984892054)
+    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -5.751532861431923)
     float3 xformOp:rotateXYZ = (63.22052, -2.5126383e-13, 36.331688)
     float3 xformOp:scale = (1, 1, 1)
     matrix4d xformOp:transform = ( (-0.7071067811865475, 0.7071067811865475, 0, 0), (-0.09133370363944027, -0.09133370363944027, 0.9916230680853516, 0), (0.7011833958241617, 0.7011833958241617, 0.12916536238866133, -0), (19, 19, 7.499999999999999, 1) )
-    double3 xformOp:translate = (9.104333292241337, -9.879226782504915, 7.821560505274261)
+    double3 xformOp:translate = (3.8510257629432276, -4.1467786159617965, 3.653898219263342)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
 }
 

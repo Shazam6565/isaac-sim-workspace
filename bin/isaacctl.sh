@@ -231,7 +231,12 @@ git_commit(){
 # ---------------------------------------------------------------- commands
 cmd_save(){
   ensure_tunnel || return 1
-  local name="${1:-latest}"
+  # Default to the scene you are actually on (same rule cmd_resume uses), NOT a
+  # hardcoded 'latest' — otherwise a bare `save` silently overwrites a finished
+  # scene with whatever stage happens to be open.
+  local name="${1:-}"
+  [ -z "$name" ] && name="$(state_get last_scene)"
+  [ -z "$name" ] && name="latest"
   log "saving scene '$name' (stopping sim for a clean snapshot) ..."
   # save_as_stage() returns ok=True even when the write is refused, so trust the
   # DIRTY/WRITABLE flags the helper reports, not its return value.

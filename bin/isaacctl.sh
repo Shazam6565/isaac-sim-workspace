@@ -318,7 +318,9 @@ EOF
 
 cmd_down(){
   if is_running && ensure_tunnel; then
-    log "auto-saving before stop ..."; cmd_save latest || err "auto-save failed (stopping anyway)"
+    # No name: let cmd_save resolve the scene you are actually on (state.json).
+    # Hardcoding 'latest' here overwrote a finished scene with an unrelated stage.
+    log "auto-saving before stop ..."; cmd_save || err "auto-save failed (stopping anyway)"
   fi
   close_tunnel
   log "stopping instance (halts \$2.69/hr compute; disk kept) ..."
@@ -328,7 +330,8 @@ cmd_down(){
 
 cmd_teardown(){
   if is_running && ensure_tunnel; then
-    log "auto-saving before delete ..."; cmd_save latest || err "auto-save failed"
+    # No name: resolve from state.json, same reason as cmd_down.
+    log "auto-saving before delete ..."; cmd_save || err "auto-save failed"
   fi
   close_tunnel
   log "DELETING instance (your work is safe in GitHub) ..."

@@ -207,24 +207,46 @@ a drive does nothing.
 
 ---
 
-## 6. Articulation root in the wrong place *(pending)*
+## 6. Articulation root — **SKIP THIS STEP on 6.0.1**
 
-**Measured:** root is on `/World/carter/Geometry/chassis_link`. It must be on the top-level
-`carter` xform.
+The lesson says to delete the articulation root from `chassis_link` and re-add it to the
+top-level `carter` xform via **Add → Physics → Articulation Root**.
 
-1. *Stage* → `chassis_link` → *Property* → **Articulation Root** section → click the
-   **red ✕ at the right edge of the section header** (the remove-component button)
-2. *Stage* → right-click **`carter`** → **Add → Physics → Articulation Root**
-3. Select `carter` → *Property* → **Articulation Root** → uncheck **Self Collisions Enabled**
+**That menu entry does not exist in 6.0.1.** The complete right-click `Add > Physics` menu is:
 
-**Why:** the articulation root declares where the kinematic tree begins. The Differential
-Controller resolves joints relative to the prim you hand it — point it at `carter` while the
-root sits on `chassis_link` and it will not find `left_wheel` / `right_wheel`.
+```
+Attachment · Colliders · Joint · Particle System
+Physics Material · Rigid Body · Rigid Body Material
+```
 
-**Why disable self-collision:** wheels are jointed to the chassis and overlap it. Self-collision
-tests them against each other every frame → jitter or a locked robot.
+(read from `omni.physx.ui-110.1.13`). There is no articulation entry, and none in `Create >
+Physics` either. Don't go looking — you don't need it.
 
-**Verify:** exactly one prim in the stage carries `ArticulationRootAPI`, and it is `carter`.
+**Both halves of the step are already satisfied.** Measured on the live stage:
+
+```
+ArticulationRootAPI on:      /World/carter/Geometry/chassis_link
+roots inside /World/carter:  1
+newton:selfCollisionEnabled: False   (already authored)
+```
+
+- **Nothing to move.** Isaac Sim resolves an articulation by searching a subtree for *exactly
+  one* root. There is exactly one under `/World/carter`, so
+  `Robot Prim = /World/carter` in the Differential Controller resolves fine with the root
+  sitting on `chassis_link`.
+- **Nothing to uncheck.** Self-collision is already off.
+
+**Why the lesson has this step:** it's a workaround for a 4.2-era importer bug that dropped the
+root in the wrong place. The 6.0.1 importer puts it on `chassis_link`, which *is* the root rigid
+body — valid USD. The importer's own docstring describes relocating the root to "the correct
+ancestor prim", i.e. the placement is deliberate.
+
+**If the controller ever does reject the robot prim**, the fallback for applying an API schema
+in Kit is the *Property* panel's **`+ Add`** button — a different list from the right-click
+`Add > Physics` menu. Contents of that list are **unverified**.
+
+**Verify instead of acting:** confirm exactly one prim in `/World/carter`'s subtree carries
+`ArticulationRootAPI`. If it is exactly one, you are done.
 
 ---
 
@@ -253,8 +275,8 @@ Radius from `left_wheel_link`'s cylinder collider; separation = `left_wheel_link
 **Why `-1`:** the Joint Index fields are new in 6.0.1 and absent from the lesson. `-1` means
 "unset, resolve by name". Supplying both a name and an index is ambiguous.
 
-**Order matters:** section 6 must be done **before** section 7, or the controller binds to the
-wrong root.
+**Order:** sections 4 → 5 → 7. Section 6 is skipped on 6.0.1 (already satisfied).
+
 
 ---
 
@@ -270,6 +292,8 @@ Recorded because the wrong version of each was believed for a while:
   `joint_target_type` exists in the API but has no widget.
 - **Collision errors were assumed to be the reason the robot misbehaved** — they were not.
   The collider fix worked; the robot was frozen by a world-anchored `root_joint`.
+- **"Add → Physics → Articulation Root"** — that menu entry does not exist in 6.0.1, and the
+  step turned out to be unnecessary anyway (see section 6).
 
 ---
 

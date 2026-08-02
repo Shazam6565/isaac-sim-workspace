@@ -100,14 +100,24 @@ Asset locations already staged for us:
    > registered, so without this the robot imports with correct joints and **no visible
    > geometry**.
 
-4. **Fix Base Link: unchecked** — Carter is a mobile robot; a fixed base bolts it to the world
-5. Joint target types:
-   - `left_wheel` → **Velocity**
-   - `right_wheel` → **Velocity**
-   - `rear_axle` → **None** (passive)
-   - `rear_pivot` → **None** (passive caster)
-6. Leave everything else at defaults
-7. Import — this writes a USD asset and opens it as its own stage
+4. **`Base Type` → `Mobile`** — **not** "Fix Base Link unchecked"; that control does not exist
+   in 6.0.1. `Base Type` is a tri-state dropdown:
+
+   | Dropdown | `fix_base` | Result |
+   |---|---|---|
+   | `Source` (default) | `None` | honours the URDF. Carter's is fixed-base → you get a world-anchored `root_joint` that **welds the robot in mid-air** |
+   | `Fixed` | `True` | adds the world joint *and* relocates the articulation root |
+   | **`Mobile`** | `False` | removes the world-to-root fixed joint → floating base ← **use this** |
+
+5. Leave everything else at defaults
+6. Import — this writes a USD asset and opens it as its own stage
+
+> **Joint target types cannot be set at import in 6.0.1.** The lesson says to set
+> `left_wheel`/`right_wheel` → Velocity and `rear_axle`/`rear_pivot` → None during import.
+> `joint_target_type` exists in `UrdfImporterConfig` but has **no widget** in the import
+> dialog. Same for `collision_type` and the drive stiffness/damping overrides. All of these
+> must be fixed on the stage after import — see
+> [`carter-worklog.md`](./carter-worklog.md) sections 2 and 4.
 
 ### 0.2 Reference it into your working stage
 
@@ -144,6 +154,13 @@ You should end up with `/World/carter` in *your* stage, environment intact.
 
 If it falls forever, there's no ground collider. If it doesn't move at all, either the base is
 fixed or there's no `PhysicsScene`.
+
+> **This is the step that actually bit us.** Carter sat frozen in mid-air with no errors,
+> because `root_joint` (a `PhysicsFixedJoint` whose `body0` is the non-rigid-body
+> `/World/carter`) anchors the chassis to the **world**. That's the `Base Type = Source`
+> consequence from Step 0.1. Fix: uncheck **Joint Enabled** on `root_joint`, or re-import with
+> `Base Type = Mobile`. Full measurements in
+> [`carter-worklog.md`](./carter-worklog.md) section 3.
 
 ## Step 4 — Inspect the joints
 

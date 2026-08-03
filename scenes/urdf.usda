@@ -7,8 +7,8 @@
                 double radius = 5
             }
             dictionary Perspective = {
-                double3 position = (5, 5, 5)
-                double3 target = (-3.978038431995401e-8, -3.978038254359717e-8, 7.956076863990802e-8)
+                double3 position = (28.187478221523072, 28.187478221523065, 28.187477668079)
+                double3 target = (-3.978038165541875e-8, -3.978037810270507e-8, 7.956077041626486e-8)
             }
             dictionary Right = {
                 double3 position = (0, -5, 0)
@@ -114,6 +114,7 @@ def "Render" (
                 float omni:rtx:rtpt:modulatingRoughnessThreshold = 0.08
                 bool omni:rtx:scene:hydra:materialSyncLoads = 1
                 bool omni:rtx:scene:hydra:mdlMaterialWarmup = 1
+                bool omni:rtx:scene:useViewLightingMode
                 rel orderedVars = </Render/Vars/LdrColor>
                 custom bool overrideClipRange = 0
                 uniform int2 resolution = (1280, 720)
@@ -163,10 +164,10 @@ over "OmniverseKit_Persp" (
     float exposure:time = 0.02
     float focalLength = 18.147562
     float focusDistance = 400
-    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -8.660254037844386)
-    float3 xformOp:rotateXYZ = (54.73561, -6.3611094e-15, 135)
+    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -48.82214409738809)
+    float3 xformOp:rotateXYZ = (54.73561, -3.1805547e-15, 135)
     float3 xformOp:scale = (1, 1, 1)
-    double3 xformOp:translate = (5, 5, 5)
+    double3 xformOp:translate = (28.187478221523072, 28.187478221523065, 28.187477668079)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
 }
 

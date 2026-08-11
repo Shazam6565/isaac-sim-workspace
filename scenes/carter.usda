@@ -7,8 +7,8 @@
                 double radius = 5
             }
             dictionary Perspective = {
-                double3 position = (3, -3, 2)
-                double3 target = (-2.684374357597532, 2.684374357597531, -1.2211451884966746)
+                double3 position = (2.7946798507533708, 1.7527687578031654, 1.4175175999927998)
+                double3 target = (0.9800634961839534, 0.5695553594994347, 0.9568458013115484)
             }
             dictionary Right = {
                 double3 position = (0, -5, 0)
@@ -39,88 +39,388 @@
 
 def Xform "World"
 {
-    def PhysicsScene "PhysicsScene" (
-        prepend apiSchemas = ["NewtonSceneAPI", "PhysxSceneAPI"]
+    def "neo_alpha1_5_physics" (
+        prepend payload = @https://omniverse-content-staging.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/Robots/1X/Neo/configuration/neo_alpha1_5_physics.usd@
     )
     {
+        token visibility = "inherited"
+        quatf xformOp:orient = (1, 0, 0, 0)
+        float3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (-0.28184079166706, -0.016731195198501858, 1.4090991508716508)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+        over "link_pelvis"
+        {
+        }
+
+        over "link_l_upper_hip"
+        {
+        }
+
+        over "link_l_lower_hip"
+        {
+        }
+
+        over "link_l_thigh"
+        {
+        }
+
+        over "link_l_patella"
+        {
+        }
+
+        over "link_l_shin"
+        {
+        }
+
+        over "link_l_ankle"
+        {
+        }
+
+        over "link_l_foot"
+        {
+        }
+
+        over "link_r_upper_hip"
+        {
+        }
+
+        over "link_r_lower_hip"
+        {
+        }
+
+        over "link_r_thigh"
+        {
+        }
+
+        over "link_r_patella"
+        {
+        }
+
+        over "link_r_shin"
+        {
+        }
+
+        over "link_r_ankle"
+        {
+        }
+
+        over "link_r_foot"
+        {
+        }
+
+        over "link_abdomen"
+        {
+        }
+
+        over "link_torso"
+        {
+        }
+
+        over "link_l_scapula"
+        {
+        }
+
+        over "link_l_shoulder"
+        {
+        }
+
+        over "link_l_upper_arm"
+        {
+        }
+
+        over "link_l_elbow"
+        {
+        }
+
+        over "link_l_lower_arm"
+        {
+        }
+
+        over "link_l_wrist"
+        {
+        }
+
+        over "link_l_hand"
+        {
+        }
+
+        over "link_neck_z"
+        {
+        }
+
+        over "link_neck_xy"
+        {
+        }
+
+        over "link_head"
+        {
+        }
+
+        over "link_r_scapula"
+        {
+        }
+
+        over "link_r_shoulder"
+        {
+        }
+
+        over "link_r_upper_arm"
+        {
+        }
+
+        over "link_r_elbow"
+        {
+        }
+
+        over "link_r_lower_arm"
+        {
+        }
+
+        over "link_r_wrist"
+        {
+        }
+
+        over "link_r_hand"
+        {
+        }
+
+        over "joints"
+        {
+            token visibility = "inherited"
+
+            over "j_l_hip_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+                token visibility = "inherited"
+            }
+
+            over "j_r_hip_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_spine_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_hip_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_hip_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_spine_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_hip_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_hip_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_shoulder_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_neck_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_shoulder_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_upperknee_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_upperknee_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_shoulder_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_neck_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_shoulder_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_lowerknee_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_lowerknee_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_shoulder_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_neck_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_shoulder_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_ankle_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_ankle_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_elbow_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_elbow_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_ankle_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_ankle_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_elbow_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_elbow_z"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_wrist_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_wrist_x"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_l_wrist_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+
+            over "j_r_wrist_y"
+            {
+                float state:angular:physics:position = 0
+                float state:angular:physics:velocity = 0
+            }
+        }
+
+        over "Looks"
+        {
+            token visibility = "inherited"
+        }
     }
+}
 
-    def Xform "carter" (
-        prepend references = @./carter/urdf/carter/carter.usda@
+def Xform "Environment"
+{
+    quatd xformOp:orient = (1, 0, 0, 0)
+    double3 xformOp:scale = (1, 1, 1)
+    double3 xformOp:translate = (0, 0, 0)
+    uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
+
+    def DistantLight "defaultLight" (
+        prepend apiSchemas = ["ShapingAPI"]
     )
     {
-        double3 xformOp:translate = (0, 0, 0.5)
-        uniform token[] xformOpOrder = ["xformOp:translate"]
-
-        over "Geometry"
-        {
-            over "chassis_link"
-            {
-                over "com_offset"
-                {
-                }
-
-                over "imu"
-                {
-                }
-
-                over "left_wheel_link"
-                {
-                }
-
-                over "right_wheel_link"
-                {
-                }
-
-                over "rear_pivot_link"
-                {
-                    over "rear_wheel_link"
-                    {
-                    }
-                }
-            }
-        }
-
-        over "Physics"
-        {
-            over "left_wheel" (
-                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
-            )
-            {
-                float drive:angular:physics:damping = 10000
-                float drive:angular:physics:maxForce = 1000000
-                float drive:angular:physics:stiffness = 0
-                float drive:angular:physics:targetVelocity = 0
-                uniform token drive:angular:physics:type = "force"
-                float state:angular:physics:position = 0
-                float state:angular:physics:velocity = 0
-            }
-
-            over "right_wheel" (
-                prepend apiSchemas = ["PhysicsDriveAPI:angular"]
-            )
-            {
-                float drive:angular:physics:damping = 10000
-                float drive:angular:physics:maxForce = 1000000
-                float drive:angular:physics:stiffness = 0
-                float drive:angular:physics:targetVelocity = 0
-                uniform token drive:angular:physics:type = "force"
-                float state:angular:physics:position = 0
-                float state:angular:physics:velocity = 0
-            }
-
-            over "rear_pivot"
-            {
-                float state:angular:physics:position = 0
-                float state:angular:physics:velocity = 0
-            }
-
-            over "rear_axle"
-            {
-                float state:angular:physics:position = 0
-                float state:angular:physics:velocity = 0
-            }
-        }
+        float inputs:angle = 1
+        float inputs:exposure = 1.5
+        float inputs:intensity = 3000
+        bool inputs:normalize = 1
+        float inputs:shaping:cone:angle = 180
+        float inputs:shaping:cone:softness
+        float inputs:shaping:focus
+        color3f inputs:shaping:focusTint
+        asset inputs:shaping:ies:file
+        custom int omni:rtx:usdluxVersion = 2505
+        quatd xformOp:orient = (0.6532814824381883, 0.2705980500730985, 0.27059805007309845, 0.6532814824381882)
+        double3 xformOp:scale = (1, 1, 1)
+        double3 xformOp:translate = (0, 0, 0)
+        uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:orient", "xformOp:scale"]
     }
 }
 
@@ -219,307 +519,123 @@ over "OmniverseKit_Persp" (
     float exposure:time = 0.02
     float focalLength = 18.147562
     float focusDistance = 400
-    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -8.660254037844386)
-    float3 xformOp:rotateXYZ = (68.16433, 3.1805547e-15, 45)
+    custom uniform vector3d omni:kit:centerOfInterest = (0, 0, -2.2147336106846987)
+    float3 xformOp:rotateXYZ = (77.99464, -2.3218049e-13, 123.1062)
     float3 xformOp:scale = (1, 1, 1)
-    double3 xformOp:translate = (3, -3, 2)
+    double3 xformOp:translate = (2.7946798507533708, 1.7527687578031654, 1.4175175999927998)
     uniform token[] xformOpOrder = ["xformOp:translate", "xformOp:rotateXYZ", "xformOp:scale"]
 }
 
-def Xform "FlatGrid" (
+def "FlatGrid" (
     prepend references = @https://omniverse-content-staging.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/Environments/Grid/default_environment.usd@
 )
 {
 }
 
-def "Graphs"
+def "Nova_Carter" (
+    prepend references = @https://omniverse-content-staging.s3-us-west-2.amazonaws.com/Assets/Isaac/6.0/Isaac/Robots/NVIDIA/NovaCarter/nova_carter.usd@
+)
 {
-    def OmniGraph "differential_controller"
+    over "chassis_link"
     {
-        token evaluationMode = "Automatic"
-        token evaluator:type = "execution"
-        token fabricCacheBacking = "StageWithoutHistory"
-        int2 fileFormatVersion = (1, 9)
-        token pipelineStage = "pipelineStageSimulation"
-
-        def OmniGraphNode "OnPlaybackTick"
+        over "sensors"
         {
-            token node:type = "omni.graph.action.OnPlaybackTick"
-            int node:typeVersion = 2
-            custom double outputs:deltaSeconds
-            custom double outputs:frame
-            custom uint outputs:tick (
-                customData = {
-                    bool isExecution = 1
+            token visibility = "invisible"
+
+            over "left_owl"
+            {
+                over "camera"
+                {
+                    custom string isaac:nameOverride (
+                        displayName = "Name Override"
+                        doc = "Name override for prim lookup in base name search"
+                    )
+                    token visibility = "invisible"
                 }
-            )
-            custom double outputs:time
+            }
         }
 
-        def OmniGraphNode "DifferentialController"
+        over "visual"
         {
-            custom double inputs:angularVelocity
-            prepend double inputs:angularVelocity.connect = </Graphs/differential_controller/SpeedAngular.outputs:product>
-            custom double inputs:dt
-            custom uint inputs:execIn (
-                customData = {
-                    bool isExecution = 1
-                }
-            )
-            prepend uint inputs:execIn.connect = </Graphs/differential_controller/OnPlaybackTick.outputs:tick>
-            custom double inputs:linearVelocity
-            prepend double inputs:linearVelocity.connect = </Graphs/differential_controller/SpeedLinear.outputs:product>
-            custom double inputs:maxAcceleration
-            custom double inputs:maxAngularAcceleration
-            custom double inputs:maxAngularSpeed
-            custom double inputs:maxDeceleration
-            custom double inputs:maxLinearSpeed
-            custom double inputs:maxWheelSpeed
-            custom double inputs:wheelDistance = 0.62
-            custom double inputs:wheelRadius = 0.24
-            token node:type = "isaacsim.robot.wheeled_robots.DifferentialController"
-            int node:typeVersion = 1
-            custom double[] outputs:velocityCommand
-        }
-
-        def OmniGraphNode "ArticulationController"
-        {
-            custom double[] inputs:effortCommand
-            custom uint inputs:execIn (
-                customData = {
-                    bool isExecution = 1
-                }
-            )
-            prepend uint inputs:execIn.connect = </Graphs/differential_controller/OnPlaybackTick.outputs:tick>
-            custom int[] inputs:jointIndices
-            custom token[] inputs:jointNames
-            prepend token[] inputs:jointNames.connect = </Graphs/differential_controller/ArrayNames.outputs:array>
-            custom double[] inputs:positionCommand
-            custom string inputs:robotPath
-            custom rel inputs:targetPrim = </World/carter/Geometry/chassis_link> (
-                customData = {
-                    dictionary omni = {
-                        dictionary graph = {
-                            string relType = "target"
-                        }
-                    }
-                }
-            )
-            custom double[] inputs:velocityCommand
-            prepend double[] inputs:velocityCommand.connect = </Graphs/differential_controller/DifferentialController.outputs:velocityCommand>
-            token node:type = "isaacsim.core.nodes.IsaacArticulationController"
-            int node:typeVersion = 1
-        }
-
-        def OmniGraphNode "ArrayNames"
-        {
-            custom int inputs:arraySize = 2
-            custom token inputs:arrayType = "token[]" (
-                allowedTokens = ["auto", "bool[]", "double[]", "float[]", "half[]", "int[]", "int64[]", "token[]", "uchar[]", "uint[]", "uint64[]", "double[2][]", "double[3][]", "double[4][]", "matrixd[2][]", "matrixd[3][]", "matrixd[4][]", "float[2][]", "float[3][]", "float[4][]", "half[2][]", "half[3][]", "half[4][]", "int[2][]", "int[3][]", "int[4][]", "timecode[]", "frame[4][]", "colord[3][]", "colorf[3][]", "colorh[3][]", "colord[4][]", "colorf[4][]", "colorh[4][]", "normald[3][]", "normalf[3][]", "normalh[3][]", "pointd[3][]", "pointf[3][]", "pointh[3][]", "quatd[4][]", "quatf[4][]", "quath[4][]", "texcoordd[2][]", "texcoordf[2][]", "texcoordh[2][]", "texcoordd[3][]", "texcoordf[3][]", "texcoordh[3][]", "vectord[3][]", "vectorf[3][]", "vectorh[3][]"]
-            )
-            custom token inputs:input0 (
-                customData = {
-                    dictionary omni = {
-                        dictionary graph = {
-                            token attrValue = "left_wheel"
-                            string resolvedType = "token"
-                        }
-                    }
-                }
-            )
-            custom token inputs:input1 = "right_wheel"
-            token node:type = "omni.graph.nodes.ConstructArray"
-            int node:typeVersion = 1
-            custom token outputs:array
-        }
-
-        def OmniGraphNode "W"
-        {
-            custom token inputs:key = "W" (
-                allowedTokens = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Apostrophe", "Backslash", "Backspace", "CapsLock", "Comma", "Del", "Down", "End", "Enter", "Equal", "Escape", "F1", "F10", "F11", "F12", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "GraveAccent", "Home", "Insert", "Key0", "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "Left", "LeftAlt", "LeftBracket", "LeftControl", "LeftShift", "LeftSuper", "Menu", "Minus", "NumLock", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadAdd", "NumpadDel", "NumpadDivide", "NumpadEnter", "NumpadEqual", "NumpadMultiply", "NumpadSubtract", "PageDown", "PageUp", "Pause", "Period", "PrintScreen", "Right", "RightAlt", "RightBracket", "RightControl", "RightShift", "RightSuper", "ScrollLock", "Semicolon", "Slash", "Space", "Tab", "Up"]
-            )
-            token node:type = "omni.graph.nodes.ReadKeyboardState"
-            int node:typeVersion = 1
-            custom bool outputs:altOut
-            custom bool outputs:ctrlOut
-            custom bool outputs:isPressed
-            custom bool outputs:shiftOut
-        }
-
-        def OmniGraphNode "A"
-        {
-            custom token inputs:key = "A" (
-                allowedTokens = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Apostrophe", "Backslash", "Backspace", "CapsLock", "Comma", "Del", "Down", "End", "Enter", "Equal", "Escape", "F1", "F10", "F11", "F12", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "GraveAccent", "Home", "Insert", "Key0", "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "Left", "LeftAlt", "LeftBracket", "LeftControl", "LeftShift", "LeftSuper", "Menu", "Minus", "NumLock", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadAdd", "NumpadDel", "NumpadDivide", "NumpadEnter", "NumpadEqual", "NumpadMultiply", "NumpadSubtract", "PageDown", "PageUp", "Pause", "Period", "PrintScreen", "Right", "RightAlt", "RightBracket", "RightControl", "RightShift", "RightSuper", "ScrollLock", "Semicolon", "Slash", "Space", "Tab", "Up"]
-            )
-            token node:type = "omni.graph.nodes.ReadKeyboardState"
-            int node:typeVersion = 1
-            custom bool outputs:altOut
-            custom bool outputs:ctrlOut
-            custom bool outputs:isPressed
-            custom bool outputs:shiftOut
-        }
-
-        def OmniGraphNode "S"
-        {
-            custom token inputs:key = "S" (
-                allowedTokens = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Apostrophe", "Backslash", "Backspace", "CapsLock", "Comma", "Del", "Down", "End", "Enter", "Equal", "Escape", "F1", "F10", "F11", "F12", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "GraveAccent", "Home", "Insert", "Key0", "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "Left", "LeftAlt", "LeftBracket", "LeftControl", "LeftShift", "LeftSuper", "Menu", "Minus", "NumLock", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadAdd", "NumpadDel", "NumpadDivide", "NumpadEnter", "NumpadEqual", "NumpadMultiply", "NumpadSubtract", "PageDown", "PageUp", "Pause", "Period", "PrintScreen", "Right", "RightAlt", "RightBracket", "RightControl", "RightShift", "RightSuper", "ScrollLock", "Semicolon", "Slash", "Space", "Tab", "Up"]
-            )
-            token node:type = "omni.graph.nodes.ReadKeyboardState"
-            int node:typeVersion = 1
-            custom bool outputs:altOut
-            custom bool outputs:ctrlOut
-            custom bool outputs:isPressed
-            custom bool outputs:shiftOut
-        }
-
-        def OmniGraphNode "D"
-        {
-            custom token inputs:key = "D" (
-                allowedTokens = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Apostrophe", "Backslash", "Backspace", "CapsLock", "Comma", "Del", "Down", "End", "Enter", "Equal", "Escape", "F1", "F10", "F11", "F12", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "GraveAccent", "Home", "Insert", "Key0", "Key1", "Key2", "Key3", "Key4", "Key5", "Key6", "Key7", "Key8", "Key9", "Left", "LeftAlt", "LeftBracket", "LeftControl", "LeftShift", "LeftSuper", "Menu", "Minus", "NumLock", "Numpad0", "Numpad1", "Numpad2", "Numpad3", "Numpad4", "Numpad5", "Numpad6", "Numpad7", "Numpad8", "Numpad9", "NumpadAdd", "NumpadDel", "NumpadDivide", "NumpadEnter", "NumpadEqual", "NumpadMultiply", "NumpadSubtract", "PageDown", "PageUp", "Pause", "Period", "PrintScreen", "Right", "RightAlt", "RightBracket", "RightControl", "RightShift", "RightSuper", "ScrollLock", "Semicolon", "Slash", "Space", "Tab", "Up"]
-            )
-            token node:type = "omni.graph.nodes.ReadKeyboardState"
-            int node:typeVersion = 1
-            custom bool outputs:altOut
-            custom bool outputs:ctrlOut
-            custom bool outputs:isPressed
-            custom bool outputs:shiftOut
-        }
-
-        def OmniGraphNode "ToDoubleW"
-        {
-            custom token inputs:role (
-                allowedTokens = ["None", "Color", "Frame", "Matrix", "Normal", "Point", "Quaternion", "TexCoord", "Timecode", "Vector"]
-            )
-            custom token inputs:value
-            prepend token inputs:value.connect = </Graphs/differential_controller/W.outputs:isPressed>
-            token node:type = "omni.graph.nodes.ToDouble"
-            int node:typeVersion = 1
-            custom token outputs:converted
-        }
-
-        def OmniGraphNode "ToDoubleA"
-        {
-            custom token inputs:role (
-                allowedTokens = ["None", "Color", "Frame", "Matrix", "Normal", "Point", "Quaternion", "TexCoord", "Timecode", "Vector"]
-            )
-            custom token inputs:value
-            prepend token inputs:value.connect = </Graphs/differential_controller/A.outputs:isPressed>
-            token node:type = "omni.graph.nodes.ToDouble"
-            int node:typeVersion = 1
-            custom token outputs:converted
-        }
-
-        def OmniGraphNode "ToDoubleS"
-        {
-            custom token inputs:role (
-                allowedTokens = ["None", "Color", "Frame", "Matrix", "Normal", "Point", "Quaternion", "TexCoord", "Timecode", "Vector"]
-            )
-            custom token inputs:value
-            prepend token inputs:value.connect = </Graphs/differential_controller/S.outputs:isPressed>
-            token node:type = "omni.graph.nodes.ToDouble"
-            int node:typeVersion = 1
-            custom token outputs:converted
-        }
-
-        def OmniGraphNode "ToDoubleD"
-        {
-            custom token inputs:role (
-                allowedTokens = ["None", "Color", "Frame", "Matrix", "Normal", "Point", "Quaternion", "TexCoord", "Timecode", "Vector"]
-            )
-            custom token inputs:value
-            prepend token inputs:value.connect = </Graphs/differential_controller/D.outputs:isPressed>
-            token node:type = "omni.graph.nodes.ToDouble"
-            int node:typeVersion = 1
-            custom token outputs:converted
-        }
-
-        def OmniGraphNode "NegateLinear"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/ToDoubleS.outputs:converted>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/NegOne.inputs:value>
-            token node:type = "omni.graph.nodes.Multiply"
-            int node:typeVersion = 2
-            custom token outputs:product
-        }
-
-        def OmniGraphNode "NegateAngular"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/ToDoubleD.outputs:converted>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/NegOne.inputs:value>
-            token node:type = "omni.graph.nodes.Multiply"
-            int node:typeVersion = 2
-            custom token outputs:product
-        }
-
-        def OmniGraphNode "AddLinear"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/ToDoubleW.outputs:converted>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/NegateLinear.outputs:product>
-            token node:type = "omni.graph.nodes.Add"
-            int node:typeVersion = 2
-            custom token outputs:sum
-        }
-
-        def OmniGraphNode "AddAngular"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/ToDoubleA.outputs:converted>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/NegateAngular.outputs:product>
-            token node:type = "omni.graph.nodes.Add"
-            int node:typeVersion = 2
-            custom token outputs:sum
-        }
-
-        def OmniGraphNode "SpeedLinear"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/AddLinear.outputs:sum>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/ScaleLinear.inputs:value>
-            token node:type = "omni.graph.nodes.Multiply"
-            int node:typeVersion = 2
-            custom token outputs:product
-        }
-
-        def OmniGraphNode "ScaleLinear"
-        {
-            custom double inputs:value = 5
-            token node:type = "omni.graph.nodes.ConstantDouble"
-            int node:typeVersion = 1
-        }
-
-        def OmniGraphNode "SpeedAngular"
-        {
-            custom token inputs:a
-            prepend token inputs:a.connect = </Graphs/differential_controller/AddAngular.outputs:sum>
-            custom token inputs:b
-            prepend token inputs:b.connect = </Graphs/differential_controller/ScaleAngular.inputs:value>
-            token node:type = "omni.graph.nodes.Multiply"
-            int node:typeVersion = 2
-            custom token outputs:product
-        }
-
-        def OmniGraphNode "ScaleAngular"
-        {
-            custom double inputs:value = 6
-            token node:type = "omni.graph.nodes.ConstantDouble"
-            int node:typeVersion = 1
-        }
-
-        def OmniGraphNode "NegOne"
-        {
-            custom int inputs:value = -1
-            token node:type = "omni.graph.nodes.ConstantInt"
-            int node:typeVersion = 1
+            token visibility = "inherited"
         }
     }
+
+    over "caster_frame_base"
+    {
+    }
+
+    over "caster_swivel_left"
+    {
+    }
+
+    over "caster_wheel_left"
+    {
+    }
+
+    over "caster_swivel_right"
+    {
+    }
+
+    over "caster_wheel_right"
+    {
+    }
+
+    over "wheel_left"
+    {
+    }
+
+    over "wheel_right"
+    {
+    }
+
+    over "joint_caster_base"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_wheel_left"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_wheel_right"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_swing_left"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_swing_right"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_caster_left"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+
+    over "joint_caster_right"
+    {
+        float state:angular:physics:position = 0
+        float state:angular:physics:velocity = 0
+    }
+}
+
+def PhysicsScene "PhysicsScene" (
+    prepend apiSchemas = ["NewtonSceneAPI", "PhysxSceneAPI"]
+)
+{
 }
 
 over "OmniverseKit_Front" (
